@@ -1,0 +1,98 @@
+{% load static %}
+{% load library_tags %}
+{% block title %}
+
+<title>Library Home</title>
+<link href="{% static 'css/home_library.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>Library Management</h1>
+        {% comment %} <form class="form-inline justify-content-center" method="GET" action="/search/">
+        <form class="form-inline justify-content-center" method="GET">
+            <div class="mt-2">
+                <input class="form-control mr-2" type="text" name="query" placeholder="search...">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form> {% endcomment %}
+        <a href="/add/" class="btn btn-success mt-3">Add Book</a>
+    </div>
+
+    <hr>
+
+    <!-- Filter Form -->
+    <form method="GET" class="mb-4">
+        <div class="mt-2" style="display: inline-flex;">
+            <input class="form-control mr-2" type="text" name="query" placeholder="search..." value={{query}}>
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+        <div class="form-row align-items-end mt-3">
+            <div class="col">
+                <label for="min_price">Min Price</label>
+                <input type="number" step="0.01" class="form-control" id="min_price" name="min_price" placeholder="Min Price" value={{min_price}}>
+            </div>
+            <div class="col">
+                <label for="max_price">Max Price</label>
+                <input type="number" step="0.01" class="form-control" id="max_price" name="max_price" placeholder="Max Price" value={{max_price}}>
+            </div>
+            <div class="col">
+                <label for="publication_at">Publication Date</label>
+                <input type="date" class="form-control" id="publication_at" name="publication_at" value={{publication_at}}>
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
+
+    <hr>
+
+    <div class="row">
+        {% for book in books %}
+            <div class="col-md-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ book.author }}</h6>
+                        <p class="card-text">Price: {{ book.price }}</p>
+                        <p class="card-text">Publication: {% date_format book.publication_at %}</p>
+                        <a href="/edit/{{book.id}}/"   class="btn btn-warning">Edit</a>
+                        <a href="/delete/{{book.id}}/" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
+
+    {% comment %} <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if books.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" aria-label="Previous"href="?page={{books.previous_page_number}}">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+
+            {% for i in books.paginator.page_range %}
+              <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+            {% endfor %}
+
+            {% if books.has_next %}
+                <li class="page-item">
+                    <a class="page-link" aria-label="Next" href="?page={{books.next_page_number}}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav> {% endcomment %}
+
+</div>
+{% endblock content %}

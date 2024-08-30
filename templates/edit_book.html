@@ -1,0 +1,38 @@
+{% load static %}
+{% block title %}
+
+<h2>{{message}}</h2>
+
+<title>Edit {{book.title}}</title>
+<link href="{% static 'css/add_edit_book.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+{% endblock title %}
+
+{% block content %}
+<div class="container" style="max-width: 40%;">
+    <h2>Edit {{book.title}}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{book.title}}" required>
+        </div>
+        <div class="form-group">
+            <label for="author">Author</label>
+            <input type="text" class="form-control" id="author" name="author" value="{{book.author}}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Price</label>
+            <input type="number" step="0.01" class="form-control" id="price" name="price" value={{book.price}} required>
+        </div>
+
+        <div class="d-flex justify-content-center mt-5">
+            <button type="submit" class="btn btn-primary btn-edit" style="background-color: #dba80e;border-color: #dba80e; margin-right: 10px;">Edit Book</button>
+            <a href="/" class="btn btn-secondary" style="margin-left: 10px;">Cancel</a>
+        </div>
+
+    </form>
+</div>
+
+{% endblock content %}
