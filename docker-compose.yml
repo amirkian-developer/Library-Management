@@ -1,36 +1,42 @@
 version: "3.9"
 
 services:
+  backend:
+    build: .
+    command: >
+      sh -c "
+      python manage.py migrate
+      && python manage.py runserver 0.0.0.0:8001
+      "
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8001:8001"
+    environment:
+      - SECRET_KEY=abcdefghijk
+      - DEBUG=True
+      
+      - PG_HOST=db
+      - PG_PORT=5432
+      - PG_USER=library_admin
+      - PG_PASSWORD=admin
+      - PG_DB_NAME=library_management
+    depends_on:
+      - db
+  
   db:
     image: docker.arvancloud.ir/postgres:latest
     volumes:
-      - ./postgre/data:/var/lib/postgresql/data
+      - lib_pg_db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=test
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=1234
-    restart: always
+      - POSTGRES_DB=library_management
+      - POSTGRES_USER=library_admin
+      - POSTGRES_PASSWORD=admin
     # healthcheck:
     #   test: ['CMD-SHELL', 'pg_isready -U postgres']
     #   interval: 10s
     #   timeout: 5s
     #   retries: 2
 
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: backend
-    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8001"
-    volumes:
-      - ./core:/usr/src/app
-    ports:
-      - "8001:8001"
-    environment:
-      - SECRET_KEY=test
-      - DEBUG=True
-
-    restart: always
-
-    depends_on:
-      - db
+volumes:
+  lib_pg_db:

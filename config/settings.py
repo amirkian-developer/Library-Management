@@ -66,12 +66,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # }
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "test",
-        "USER": "admin",
-        "PASSWORD": "1234",
-        "HOST": "db",
-        "PORT": 5432,
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": config("PG_DB_NAME", default="library_management"),
+        "USER": config("PG_USER", default="library_admin"),
+        "PASSWORD": config("PG_PASSWORD", default="admin"),
+        "HOST": config("PG_HOST", default="db"),
+        "PORT": config("PG_PORT", default="5432"),
     }
 }
 
